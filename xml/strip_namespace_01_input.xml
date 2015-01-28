@@ -1,0 +1,6 @@
+<test:do xmlns:test="http://temp/test">
+	<test:wakeup>
+		<test:day v="Saturday"/>
+		<test:state v="sleepy" />
+	</test:wakeup>
+</test:do>

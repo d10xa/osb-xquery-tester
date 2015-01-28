@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<MESSIER xmlns="http://transentia">
+  <M INDEX="1">
+    <CONSTELLATION>Taurus</CONSTELLATION>
+    <DESCRIPTION>Diffuse Nebula</DESCRIPTION>
+  </M>
+  <M INDEX="2">
+    <CONSTELLATION>Aqarius</CONSTELLATION>
+    <DESCRIPTION>Globular Cluster</DESCRIPTION>
+  </M>
+  <M INDEX="3">
+    <CONSTELLATION>Canes Venatici</CONSTELLATION>
+    <DESCRIPTION>Globular Cluster</DESCRIPTION>
+  </M>
+  <M INDEX="4">
+    <CONSTELLATION>Scorpius</CONSTELLATION>
+    <DESCRIPTION>Globular Cluster</DESCRIPTION>
+  </M>
+  <M INDEX="5">
+    <CONSTELLATION>Serpens</CONSTELLATION>
+    <DESCRIPTION>Globular Cluster</DESCRIPTION>
+  </M>
+  <M INDEX="6">
+    <DESCRIPTION>ONLY FOR TESTING</DESCRIPTION>
+  </M>
+</MESSIER>

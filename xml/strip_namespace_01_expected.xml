@@ -1,0 +1,6 @@
+<do>
+	<wakeup>
+		<day v="Saturday"/>
+		<state v="sleepy" />
+	</wakeup>
+</do>

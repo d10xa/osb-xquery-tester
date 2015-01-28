@@ -1,0 +1,60 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6"
+    }
+}
+apply plugin: 'groovy'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven'
+
+group = 'ru.d10xa'
+version = '1.1.1'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+repositories {
+    jcenter()
+}
+configurations {
+    published
+}
+dependencies {
+    compile 'junit:junit:4.12'
+    compile fileTree(dir: 'lib', include: '*.jar')
+    compile 'org.codehaus.groovy:groovy-all:2.4.0'
+    compile 'commons-net:commons-net:3.3'
+    compile 'xmlunit:xmlunit:1.4'
+    compile 'antlr:antlr:2.7.7'
+    compile 'org.apache.xmlbeans:xmlbeans:2.5.0'
+}
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+artifacts {
+    published sourceJar
+}
+bintray {
+    user = bintray_net_user
+    key = bintray_net_key
+    configurations = ['published', 'archives']
+    publish = true
+    pkg {
+        repo = 'maven'
+        name = 'osb-xquery-tester'
+        desc = 'try to test your xquery'
+        websiteUrl = 'https://github.com/d10xa/osb-xquery-tester'
+        issueTrackerUrl = 'https://github.com/d10xa/osb-xquery-tester/issues'
+        vcsUrl = 'https://github.com/d10xa/osb-xquery-tester.git'
+        licenses = ['MIT']
+        publicDownloadNumbers = true
+        version {
+            name = project.version
+            desc = 'java 1.6 Compatibility'
+        }
+    }
+}
