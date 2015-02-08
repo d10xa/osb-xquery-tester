@@ -39,8 +39,12 @@ artifacts {
     published sourceJar
 }
 bintray {
-    user = bintray_net_user
-    key = bintray_net_key
+    if(!project.hasProperty('bintray_net_user')){
+        project.ext.bintray_net_user = 'default'
+    }
+    if(!project.hasProperty('bintray_net_key')){
+        project.ext.bintray_net_key = 'default'
+    }
     configurations = ['published', 'archives']
     publish = true
     pkg {
