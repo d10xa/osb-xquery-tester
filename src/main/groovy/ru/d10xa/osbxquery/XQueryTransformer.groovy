@@ -1,42 +1,51 @@
 package ru.d10xa.osbxquery
 
-import org.apache.xmlbeans.XmlBoolean
-import org.apache.xmlbeans.XmlDateTime
-import org.apache.xmlbeans.XmlDouble
-import org.apache.xmlbeans.XmlInteger
 import org.apache.xmlbeans.XmlObject
 import org.apache.xmlbeans.XmlOptions
-import org.apache.xmlbeans.XmlString
 
 import static ru.d10xa.osbxquery.XQueryExternalVariable.extractLastExternalVariable
+import static ru.d10xa.osbxquery.XQueryOptionsUtils.createOptions
 
 class XQueryTransformer {
 
     private final String xquerySource
+
     private Map params
 
-    XQueryTransformer(String xquerySource){
-        this.xquerySource = xquerySource
+    XQueryTransformer(String xqueryFile){
+        this.xquerySource = new File(xqueryFile).text
     }
 
-    XQueryTransformer(File xqueryFile) {
-        this.xquerySource = xqueryFile.text
+    XQueryTransformer(File xquery) {
+        this.xquerySource = xquery.text
     }
     
-    XQueryTransformer(Map params, File xqueryFile) {
-        this.xquerySource = xqueryFile.text
+    XQueryTransformer(Map params, File xquery) {
+        this.xquerySource = xquery.text
         this.params = params
     }
 
-    XQueryTransformer(Map params, String xquerySource) {
-        this.xquerySource = xquerySource
+    XQueryTransformer(Map params, String xqueryFile) {
+        this.xquerySource = new File(xqueryFile).text
         this.params = params
     }
 
-    static XQueryTransformer buildSingleVariableTransformer(File xquery,File inputXml){
+    XQueryTransformer(Map params, Content xquery) {
+        this.xquerySource = xquery.content
+        this.params = params
+    }
+
+    static XQueryTransformer buildSingleVariableTransformer(File xquery, File inputXml){
         XQueryExternalVariable variable = extractLastExternalVariable(xquery.text)
         Map<String, Object> xmlOptions = new HashMap<String, Object>();
         xmlOptions.put(variable.name, inputXml);
+        return new XQueryTransformer(xmlOptions,xquery);
+    }
+
+    static XQueryTransformer buildSingleVariableTransformer(Content xquery, Content input){
+        XQueryExternalVariable variable = extractLastExternalVariable(xquery as String)
+        Map<String, Object> xmlOptions = new HashMap<String, Object>();
+        xmlOptions.put(variable.name, input);
         return new XQueryTransformer(xmlOptions,xquery);
     }
 
@@ -48,54 +57,6 @@ class XQueryTransformer {
         }
         XmlObject[] results = xmlObject.execQuery(xquerySource, options)
         return results[0].xmlText(new XmlOptions().setSavePrettyPrint().setSavePrettyPrintIndent(2))
-    }
-
-    private createOptions(map) {
-        def optionsMap = [:]
-        map.each { k, v ->
-            switch (v?.class) {
-                case Date:
-                    XmlDateTime dt = XmlDateTime.Factory.newInstance();
-                    dt.setDateValue(v)
-                    optionsMap.put(k, dt)
-                    break
-                case Boolean:
-                    XmlBoolean b = XmlBoolean.Factory.newInstance();
-                    b.set(v)
-                    optionsMap.put(k, b)
-                    break
-                case [BigInteger, Integer, Long, Short, Byte, byte, short, int, long]:
-                    XmlInteger i = XmlInteger.Factory.newInstance();
-                    i.setBigIntegerValue(v as BigInteger)
-                    optionsMap.put(k, i)
-                    break
-                case [BigDecimal, Float, Double, float, double]:
-                    XmlDouble xd = XmlDouble.Factory.newInstance();
-                    xd.setDoubleValue(v as double)
-                    optionsMap.put(k, xd)
-                    break
-                case String:
-                    XmlString string = XmlString.Factory.newInstance();
-                    string.setStringValue(v);
-                    optionsMap.put(k, string)
-                    break
-                case File:
-                    def txt = v.text
-                    optionsMap.put(k, XmlObject.Factory.parse(txt).selectPath("/*")[0])
-                    break
-
-                case null:
-                    XmlObject n = XmlObject.Factory.newInstance()
-                    n.setNil()
-                    optionsMap.put(k, n)
-                    break
-
-                default:
-                    throw new Exception("Unhandled type: ${v.class}")
-                    break
-            }
-        }
-        optionsMap
     }
 
     def withString(c){

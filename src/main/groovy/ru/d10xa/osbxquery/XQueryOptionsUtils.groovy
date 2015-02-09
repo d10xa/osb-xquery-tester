@@ -36,7 +36,10 @@ class XQueryOptionsUtils {
                     def txt = v.text
                     optionsMap.put(k, XmlObject.Factory.parse(txt).selectPath("/*")[0])
                     break
-
+                case Content:
+                    def txt = v as String
+                    optionsMap.put(k, XmlObject.Factory.parse(txt).selectPath("/*")[0])
+                    break
                 case null:
                     XmlObject n = XmlObject.Factory.newInstance()
                     n.setNil()
