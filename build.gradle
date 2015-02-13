@@ -1,10 +1,5 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6"
-    }
+plugins {
+    id "com.jfrog.bintray" version "1.0"
 }
 apply plugin: 'groovy'
 apply plugin: 'com.jfrog.bintray'
@@ -25,12 +20,17 @@ configurations {
 }
 dependencies {
     compile 'junit:junit:4.12'
-    compile fileTree(dir: 'lib', include: '*.jar')
     compile 'org.codehaus.groovy:groovy-all:2.4.0'
-    compile 'commons-net:commons-net:3.3'
     compile 'xmlunit:xmlunit:1.4'
-    compile 'antlr:antlr:2.7.7'
     compile 'org.apache.xmlbeans:xmlbeans:2.5.0'
+    compile 'org.slf4j:slf4j-api:1.7.2'
+    
+    runtime fileTree(dir: 'lib', include: '*.jar')
+    runtime 'commons-net:commons-net:3.3'
+    runtime 'antlr:antlr:2.7.7'
+    runtime 'ch.qos.logback:logback-classic:1.0.9'
+    runtime 'ch.qos.logback:logback-core:1.0.9'
+
 }
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource
@@ -61,7 +61,7 @@ bintray {
         publicDownloadNumbers = true
         version {
             name = project.version
-            desc = 'java 1.6 Compatibility'
+            desc = 'add logging'
         }
     }
 }

@@ -1,9 +1,12 @@
 package ru.d10xa.osbxquery
+
+import groovy.util.logging.Slf4j
 import org.hamcrest.Description
 import org.hamcrest.Factory
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
+@Slf4j
 class IsSimilarMatcher extends TypeSafeMatcher<BaseXQCheck> {
 
     private BaseXQCheck xqueryCheck
@@ -11,7 +14,12 @@ class IsSimilarMatcher extends TypeSafeMatcher<BaseXQCheck> {
     @Override
     protected boolean matchesSafely(BaseXQCheck item) {
         this.xqueryCheck = item
-        return item.similar()
+        log.debug("expected:\n${item?.expectedXml?.content}")
+        log.debug("generated:\n${item?.generatedXml}")
+        def similar = item.similar()
+        log.debug("similar = ${item?.similar()}")
+        log.debug("identical = ${item?.identical()}")
+        return similar
     }
 
     @Factory
